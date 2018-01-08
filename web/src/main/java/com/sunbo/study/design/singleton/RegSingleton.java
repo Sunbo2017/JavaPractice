@@ -1,4 +1,4 @@
-package com.sunbo.study.design;
+package com.sunbo.study.design.singleton;
 
 import com.google.common.collect.Maps;
 

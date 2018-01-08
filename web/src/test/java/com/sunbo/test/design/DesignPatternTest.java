@@ -1,9 +1,9 @@
 package com.sunbo.test.design;
 
-import com.sunbo.study.design.LazySingleton;
-import com.sunbo.study.design.HungrySingleton;
-import com.sunbo.study.design.RegSingleton;
-import com.sunbo.study.design.SyncLazySingleton;
+import com.sunbo.study.design.singleton.LazySingleton;
+import com.sunbo.study.design.singleton.HungrySingleton;
+import com.sunbo.study.design.singleton.RegSingleton;
+import com.sunbo.study.design.singleton.SyncLazySingleton;
 import org.junit.Test;
 
 /**
