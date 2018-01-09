@@ -1,0 +1,6 @@
+com\sunbo\practice\domain\factory\RouJiaMo.class
+com\sunbo\practice\domain\factory\RouJiaMoStore.class
+com\sunbo\practice\domain\factory\SourRouJiaMo.class
+com\sunbo\practice\domain\factory\SpicyRouJiaMo.class
+com\sunbo\practice\domain\factory\SweetRouJiaMo.class
+com\sunbo\practice\domain\Student.class

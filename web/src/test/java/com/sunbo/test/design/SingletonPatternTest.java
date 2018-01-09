@@ -11,7 +11,7 @@ import org.junit.Test;
  * Date 2018/1/8
  * Description 单例模式使用测试
  */
-public class DesignPatternTest {
+public class SingletonPatternTest {
 
     @Test
     public void testHungrySingleton(){
