@@ -26,7 +26,7 @@ public class Resource {
         }
         //生产一个
         number++;
-        System.out.println(Thread.currentThread().getName() + "生产者--------" + number);
+        System.out.println(Thread.currentThread().getName() + ":生产者--------" + number);
         //将资源标记为已经生产
         flag = true;
         //唤醒在等待操作资源的线程（队列）
@@ -44,7 +44,7 @@ public class Resource {
                 e.printStackTrace();
             }
         }
-        System.out.println(Thread.currentThread().getName() + "消费者********" + number);
+        System.out.println(Thread.currentThread().getName() + ":消费者********" + number);
         flag = false;
         notify();
     }
