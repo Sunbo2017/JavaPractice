@@ -9,6 +9,13 @@ import org.junit.Test;
  *         Description
  */
 public class ThreadTest {
+    private static float[] f = new float[]{0,1};
+    @Test
+    public void testF(){
+        float a = 1.0f;
+        System.out.println(f[1]);
+        System.out.println(a);
+    }
 
     @Test
     public void testWait() throws Exception{
