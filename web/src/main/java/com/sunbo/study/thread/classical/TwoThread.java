@@ -8,6 +8,10 @@ import java.util.concurrent.*;
  * @author sunboyan
  * Date 2018/1/17
  * Description 写两个线程，一个线程打印1~52，另一个线程打印A~Z，打印顺序是12A34B...5152Z
+ * 思路分析: 一个线程打印数字，每次打印两个数字，26次打印完，另一个线程打印字母，也是26次打印完；
+ * 可以创建两个方法，一个方法打印数字，一个打印字母；
+ * 还有创建一个全局变量用来控制具体执行的是哪个线程；
+ * 每个方法都被执行26次
  */
 public class TwoThread {
     public static void main(String args[]){
