@@ -1,6 +1,7 @@
 package com.sunbo.study.thread.classical;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.Data;
 
 import java.util.concurrent.*;
 
@@ -9,26 +10,36 @@ import java.util.concurrent.*;
  *         Date 2018/1/9
  *         Description 生产者消费者
  */
-public class ProducerConsumerTest {
+public class ProducerConsumer {
+
+    private static final int MAX_RESOURCE = 100;
 
     public static void main(String args[]) {
         Resource resource = new Resource();
-        //生产者线程
+        //线程池
         ThreadFactory producerThreadFactory = new ThreadFactoryBuilder()
-                .setNameFormat("生产者线程").build();
+                .setNameFormat("生产者消费者线程").build();
         ExecutorService producerThreadPool = new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1024), producerThreadFactory, new ThreadPoolExecutor.AbortPolicy());
-        producerThreadPool.execute(new Producer(resource));
+                new LinkedBlockingQueue<>(1024), producerThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+        producerThreadPool.execute(()->{
+            while (resource.getNumber() < MAX_RESOURCE){
+                System.out.println("当前批次："+ (resource.getNumber() + 1));
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                resource.create();
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                resource.destroy();
+            }
+        });
         producerThreadPool.shutdown();
-        //消费者线程
-        ThreadFactory consumerThreadFactory1 = new ThreadFactoryBuilder()
-                .setNameFormat("消费者线程").build();
-        ExecutorService consumerThreadPool = new ThreadPoolExecutor(1, 1,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1024), consumerThreadFactory1, new ThreadPoolExecutor.AbortPolicy());
-        consumerThreadPool.execute(new Consumer(resource));
-        consumerThreadPool.shutdown();
 
     }
 
@@ -37,6 +48,7 @@ public class ProducerConsumerTest {
 /**
  * 产品资源
  */
+@Data
 class Resource {
     /**资源序号*/
     private int number = 0;

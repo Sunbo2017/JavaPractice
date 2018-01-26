@@ -15,46 +15,21 @@ public class ThreeThread {
     public static void main(String[] args){
         JobThread3 my = new JobThread3();
 
-        //线程1
-        ThreadFactory threadFactory1 = new ThreadFactoryBuilder()
+        //线程池
+        ThreadFactory threadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("线程1").build();
-        ExecutorService threadPool1 = new ThreadPoolExecutor(1, 1,
+        ExecutorService threadPool = new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(1024), threadFactory1, new ThreadPoolExecutor.AbortPolicy());
-        threadPool1.execute(() ->{
+                new LinkedBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+        threadPool.execute(() ->{
             // TODO Auto-generated method stub
             for(int i = 0; i < 5; i++){
                 my.printA();
-            }
-        });
-        threadPool1.shutdown();
-        //线程2
-        ThreadFactory threadFactory2 = new ThreadFactoryBuilder()
-                .setNameFormat("线程2").build();
-        ExecutorService threadPool2 = new ThreadPoolExecutor(1, 1,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(1024), threadFactory2, new ThreadPoolExecutor.AbortPolicy());
-        threadPool2.execute(() ->{
-            // TODO Auto-generated method stub
-            for(int i = 0; i < 5; i++){
                 my.printB();
-            }
-        });
-        threadPool2.shutdown();
-
-        //线程3
-        ThreadFactory threadFactory3 = new ThreadFactoryBuilder()
-                .setNameFormat("线程3").build();
-        ExecutorService threadPool3 = new ThreadPoolExecutor(1, 1,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(1024), threadFactory3, new ThreadPoolExecutor.AbortPolicy());
-        threadPool3.execute(() ->{
-            // TODO Auto-generated method stub
-            for(int i = 0; i < 5; i++){
                 my.printC();
             }
         });
-        threadPool3.shutdown();
+        threadPool.shutdown();
     }
 }
 
