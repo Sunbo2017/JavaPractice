@@ -72,6 +72,7 @@ public class StreamApiGetTest {
      */
     @Test
     public void getStreamFromValue(){
+
         /** 准备使用对象 */
         Person person1 = new Person("001","令狐冲",30,true);
         Person person2 = new Person("002","张无忌",30,true);
