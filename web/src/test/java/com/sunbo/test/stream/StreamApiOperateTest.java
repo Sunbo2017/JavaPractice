@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -196,6 +196,203 @@ public class StreamApiOperateTest {
             return staff;
         }).collect(Collectors.toList());
         staffList.forEach(p ->System.out.println(p.getName() + "," + p.getBirth()));
+        System.out.println("==========================================================");
+
+    }
+
+    /**
+     * 合并多个流,将小流合并成一个大流：用flatMap替换map
+     */
+    @Test
+    public void flatMapStream(){
+
+        /** 创建集合 */
+        List<String> list = Lists.newArrayList();
+        list.add("I am a boy");
+        list.add("I love the girl");
+        list.add("But the girl loves another girl");
+
+        /** 创建流，元素按空格分词，去重后组合为一个新流 */
+        List<String> newList = list.stream().map(line -> line.split(" "))
+                .flatMap(Arrays :: stream)
+                .distinct()
+                .collect(Collectors.toList());
+        newList.forEach(p -> System.out.println(p));
+        System.out.println("==========================================================");
+
+    }
+
+    /**
+     * 匹配操作，返回布尔类型
+     */
+    @Test
+    public void matchStream(){
+
+        /** 准备使用对象 */
+        Person person1 = new Person("001","令狐冲",0,30,true);
+        Person person2 = new Person("002","张无忌",0,30,true);
+        Person person3 = new Person("003","周芷若",1,30,true);
+        Person person4 = new Person("004","杨过",0,30,true);
+        Person person5 = new Person("005","郭靖",0,30,true);
+        Person person6 = new Person("006","任盈盈",1,30,false);
+        Person person7 = new Person("007","岳灵珊",1,30,false);
+
+        /** 创建集合 */
+        List<Person> personList = Lists.newArrayList();
+        personList.add(person1);
+        personList.add(person2);
+        personList.add(person3);
+        personList.add(person4);
+        personList.add(person5);
+        personList.add(person6);
+        personList.add(person7);
+
+        /** 是否至少有一个无效对象 */
+        Boolean result1 = personList.stream().anyMatch(p -> p.getValid().equals(Boolean.FALSE));
+        /** 是否全部为无效对象 */
+        Boolean result2 = personList.stream().allMatch(p -> p.getValid().equals(Boolean.FALSE));
+        /** 是否全部不是无效对象 */
+        Boolean result3 = personList.stream().noneMatch(p -> p.getValid().equals(Boolean.FALSE));
+        System.out.println("anyMatch:result====" + result1);
+        System.out.println("allMatch:result====" + result2);
+        System.out.println("noneMatch:result====" + result3);
+        System.out.println("==========================================================");
+    }
+
+    /**
+     * 查询操作，返回一个Optional类型的元素
+     */
+    @Test
+    public void findStream(){
+        /** 准备使用对象 */
+        Person person1 = new Person("001","令狐冲",0,30,true);
+        Person person2 = new Person("002","张无忌",0,30,true);
+        Person person3 = new Person("003","周芷若",1,30,true);
+        Person person4 = new Person("004","杨过",0,30,true);
+        Person person5 = new Person("005","郭靖",0,30,true);
+        Person person6 = new Person("006","任盈盈",1,30,false);
+        Person person7 = new Person("007","岳灵珊",1,30,false);
+
+        /** 创建集合 */
+        List<Person> personList = Lists.newArrayList();
+        personList.add(person1);
+        personList.add(person2);
+        personList.add(person3);
+        personList.add(person4);
+        personList.add(person5);
+        personList.add(person6);
+        personList.add(person7);
+
+        /** findAny能够从流中随便选一个元素出来 */
+        Optional<Person> anyPerson = personList.stream().findAny();
+        System.out.println(anyPerson.get().getName());
+        Optional<Person> firstPerson = personList.stream().findFirst();
+        System.out.println(firstPerson.get().getName());
+        System.out.println("==========================================================");
+    }
+
+    /**
+     * 归约操作，也叫聚合操作：将集合中的所有元素经过指定运算，折叠成一个元素输出
+     * 如：求最值、平均数等，这些操作都是将一个集合的元素折叠成一个元素输出。
+     */
+    @Test
+    public void reduceStream(){
+
+        /** 准备使用对象 */
+        Person person1 = new Person("001","令狐冲",0,30,true);
+        Person person2 = new Person("002","张无忌",0,30,true);
+        Person person3 = new Person("003","周芷若",1,30,true);
+        Person person4 = new Person("004","杨过",0,30,true);
+        Person person5 = new Person("005","郭靖",0,30,true);
+        Person person6 = new Person("006","任盈盈",1,30,false);
+        Person person7 = new Person("007","岳灵珊",1,30,false);
+
+        /** 创建集合 */
+        List<Person> personList = Lists.newArrayList();
+        personList.add(person1);
+        personList.add(person2);
+        personList.add(person3);
+        personList.add(person4);
+        personList.add(person5);
+        personList.add(person6);
+        personList.add(person7);
+
+        /** 提取年龄集合，求和 */
+        List<Integer> ageList = personList.stream().map(p -> p.getAge()).collect(Collectors.toList());
+        Integer sumAge = ageList.stream().reduce(0,(p,a) -> p + a);
+        System.out.println("方式1，年龄总和：" + sumAge);
+
+        /** 直接聚合求和 */
+        Person temp = new Person();
+        temp.setAge(0);
+        Person sum = personList.stream().reduce(temp,(p1,p2) -> {
+            p1.setAge(p1.getAge() + p2.getAge());
+            return p1;
+        });
+        System.out.println("方式2，年龄总和：" + sum.getAge());
+
+        /** 聚合求和，返回 Optional */
+        Optional<Person> opt = personList.stream().reduce((p1,p2) -> {
+            p1.setAge(p1.getAge() + p2.getAge());
+            return p1;
+        });
+        System.out.println("方式3，年龄总和：" + opt.get().getAge());
+
+        /** 使用integer的sum函数 */
+        Integer sumAge1 = ageList.stream().reduce(0,Integer :: sum);
+        System.out.println("方式4，年龄总和：" + sumAge1);
+        System.out.println("==========================================================");
+    }
+
+    /**
+     * 数值流使用
+     * StreamAPI提供了三种数值流：IntStream、DoubleStream、LongStream，
+     * 也提供了将普通流转换成数值流的三种方法：mapToInt、mapToDouble、mapToLong。
+     * 每种数值流都提供了数值计算函数，如max、min、sum、average等。
+     * mapToInt、mapToDouble、mapToLong进行数值操作后的返回结果分别为：OptionalInt、OptionalDouble、OptionalLong。
+     * 它们是Optional的一个子类，能够判断流是否为空，并对流为空的情况作相应的处理。
+     */
+    @Test
+    public void numberStream(){
+        /** 准备使用对象 */
+        Person person1 = new Person("001","令狐冲",0,30,true);
+        Person person2 = new Person("002","张无忌",0,31,true);
+        Person person3 = new Person("003","周芷若",1,32,true);
+        Person person4 = new Person("004","杨过",0,30,true);
+        Person person5 = new Person("005","郭靖",0,30,true);
+        Person person6 = new Person("006","任盈盈",1,30,false);
+        Person person7 = new Person("007","岳灵珊",1,36,false);
+
+        /** 创建集合 */
+        List<Person> personList = Lists.newArrayList();
+        personList.add(person1);
+        personList.add(person2);
+        personList.add(person3);
+        personList.add(person4);
+        personList.add(person5);
+        personList.add(person6);
+        personList.add(person7);
+
+        /** 获取数值流 */
+        IntStream stream = personList.stream().mapToInt(Person::getAge);
+        stream.forEach(a -> System.out.println("年龄 = " + a));
+
+        /** 求最大值max */
+        OptionalInt maxAge = personList.stream().mapToInt(Person :: getAge).max();
+        System.out.println("最大年龄：" + maxAge.getAsInt());
+
+        /** 求最小值min */
+        OptionalInt minAge = personList.stream().mapToInt(Person :: getAge).min();
+        System.out.println("最小年龄：" + minAge.getAsInt());
+
+        /** 年龄求和 */
+        Integer sumAge = personList.stream().mapToInt(Person :: getAge).sum();
+        System.out.println("年龄总和：" + sumAge);
+
+        /** 求平均值 */
+        OptionalDouble avgAge = personList.stream().mapToInt(Person :: getAge).average();
+        System.out.println("年龄平均值：" + avgAge.getAsDouble());
+
         System.out.println("==========================================================");
 
     }
