@@ -317,7 +317,7 @@ public class StreamApiOperateTest {
         personList.add(person6);
         personList.add(person7);
 
-        /** 提取年龄集合，求和 */
+        /** 提取年龄集合并求和 */
         List<Integer> ageList = personList.stream().map(p -> p.getAge()).collect(Collectors.toList());
         Integer sumAge = ageList.stream().reduce(0,(p,a) -> p + a);
         System.out.println("方式1，年龄总和：" + sumAge);
