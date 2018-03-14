@@ -397,4 +397,64 @@ public class StreamApiOperateTest {
 
     }
 
+    /**
+     * 使用java8进行集合排序
+     */
+    @Test
+    public void listSort8(){
+        /** 准备使用对象 */
+        Person person1 = new Person("001","令狐冲",0,30,true);
+        Person person2 = new Person("002","张无忌",0,40,true);
+        Person person3 = new Person("003","周芷若",1,20,true);
+        Person person4 = new Person("004","杨过",0,35,true);
+        Person person5 = new Person("005","郭靖",0,41,true);
+        Person person6 = new Person("006","任盈盈",1,25,false);
+        Person person7 = new Person("007","岳灵珊",1,10,false);
+
+        /** 创建集合 */
+        List<Person> personList = Lists.newArrayList();
+        personList.add(person1);
+        personList.add(person2);
+        personList.add(person3);
+        personList.add(person4);
+        personList.add(person5);
+        personList.add(person6);
+        personList.add(person7);
+        /** 排序 */
+        personList.sort(Comparator.comparing(Person::getAge));
+        personList.stream().forEach(p -> System.out.println(p.getName()));
+    }
+
+    /**
+     * 不使用java8进行集合排序
+     */
+    @Test
+    public void listSort(){
+        /** 准备使用对象 */
+        Person person4 = new Person("004","杨过",0,35,true);
+        Person person1 = new Person("001","令狐冲",0,30,true);
+        Person person2 = new Person("002","张无忌",0,40,true);
+        Person person3 = new Person("003","周芷若",1,20,true);
+        Person person5 = new Person("005","郭靖",0,41,true);
+        Person person6 = new Person("006","任盈盈",1,25,false);
+        Person person7 = new Person("007","岳灵珊",1,10,false);
+
+        /** 创建集合 */
+        List<Person> personList = Lists.newArrayList();
+        personList.add(person1);
+        personList.add(person2);
+        personList.add(person3);
+        personList.add(person4);
+        personList.add(person5);
+        personList.add(person6);
+        personList.add(person7);
+        /** 排序，使用Collections工具类 */
+        Collections.sort(personList, new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                return o1.getAge().compareTo(o2.getAge());
+            }
+        });
+        personList.stream().forEach(p -> System.out.println(p.getName()));
+    }
 }
